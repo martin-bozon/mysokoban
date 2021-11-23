@@ -32,6 +32,12 @@ class Grille:
         lis = [self.lvtest[y][x] for (x, y) in self.coord_objec]
         return lis.count(CAISSE_OBJECTIF) == len(self.coord_objec)
 
+    def getPlayerPosition(self, grille):
+        for y in range(len(self.lvtest)):
+            for x in range(len(self.lvtest[y])):
+                if self.lvtest[y][x] == PLAYER:
+                    return (x * SIZE, y * SIZE)
+
 
 if __name__ == '__main__':
     g = Grille()
