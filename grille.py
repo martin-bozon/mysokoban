@@ -8,7 +8,7 @@ class Grille:
             MUR: pygame.image.load("img/mur.png"),
             CAISSE: pygame.image.load("img/banane.png"),
             OBJECTIF: pygame.image.load("img/objectif.png"),
-            #CAISSE_OK: pygame.image.load("img/caisse_ok.jpg"),
+            CAISSE_OBJECTIF: pygame.image.load("img/caisse_ok.jpg"),
         }
         with open(fichier, 'r') as fich:
             self.lvtest = [[int(l) for l in line.strip().split(" ")] for line in fich]
@@ -37,6 +37,61 @@ class Grille:
             for x in range(len(self.lvtest[y])):
                 if self.lvtest[y][x] == PLAYER:
                     return (x * SIZE, y * SIZE)
+
+    def move_caisse(self, x, y, pos):
+        self.is_fini()
+
+        if pos == "gauche":
+            if self.lvtest[y][x-2] not in (MUR, CAISSE, CAISSE_OBJECTIF):
+                if self.lvtest[y][x-1] == CAISSE_OBJECTIF:
+                    self.lvtest[y][x-1] = OBJECTIF
+                else:
+                    self.lvtest[y][x-1] = VIDE
+                if self.lvtest[y][x-2] == OBJECTIF:
+                    self.lvtest[y][x-2] = CAISSE_OBJECTIF
+                    return True
+                else:
+                    self.lvtest[y][x-2] = CAISSE
+                    return True
+
+        if pos == "droite":
+            if self.lvtest[y][x+2] not in (MUR, CAISSE, CAISSE_OBJECTIF):
+                if self.lvtest[y][x+1] == CAISSE_OBJECTIF:
+                    self.lvtest[y][x+1] = OBJECTIF
+                else:
+                    self.lvtest[y][x+1] = VIDE
+                if self.lvtest[y][x+2] == OBJECTIF:
+                    self.lvtest[y][x+2] = CAISSE_OBJECTIF
+                    return True
+                else:
+                    self.lvtest[y][x+2] = CAISSE
+                    return True
+
+        if pos == "haut":
+            if self.lvtest[y-2][x] not in (MUR, CAISSE, CAISSE_OBJECTIF):
+                if self.lvtest[y-1][x] == CAISSE_OBJECTIF:
+                    self.lvtest[y-1][x] = OBJECTIF
+                else:
+                    self.lvtest[y-1][x] = VIDE
+                if self.lvtest[y-2][x] == OBJECTIF:
+                    self.lvtest[y-2][x] = CAISSE_OBJECTIF
+                    return True
+                else:
+                    self.lvtest[y-2][x] = CAISSE
+                    return True
+
+        if pos == "bas":
+            if self.lvtest[y+2][x] not in (MUR, CAISSE, CAISSE_OBJECTIF):
+                if self.lvtest[y+1][x] == CAISSE_OBJECTIF:
+                    self.lvtest[y+1][x] = OBJECTIF
+                else:
+                    self.lvtest[y+1][x] = VIDE
+                if self.lvtest[y+2][x] == OBJECTIF:
+                    self.lvtest[y+2][x] = CAISSE_OBJECTIF
+                    return True
+                else:
+                    self.lvtest[y+2][x] = CAISSE
+                    return True
 
 
 if __name__ == '__main__':

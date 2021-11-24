@@ -28,11 +28,6 @@ while not _grille.is_fini():
             sys.exit()
         if event.type == KEYDOWN:
             _player.move(event.key)
-            if event.key == K_r:
-                _grille.genMap("matrice.txt")
-                _grille.drawMap(screen)
-                _player = Player(_grille)
-                _player.drawPlayer(screen)
     screen.blit(background, (0, 0))
     _grille.drawMap(screen)
     _player.drawPlayer(screen)

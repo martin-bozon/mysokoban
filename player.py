@@ -17,34 +17,66 @@ class Player:
         self.x = int(self.pos[0] / SIZE)
         self.y = int(self.pos[1] / SIZE)
 
-        self.hauty = self.y - 1
-        self.basy = self.y + 1
-        self.droitex = self.x + 1
-        self.gauchex = self.x - 1
-
     def drawPlayer(self, screen):
         screen.blit(self.position, (self.x * SIZE, self.y * SIZE))
 
     def move(self, key):
         if key == K_LEFT:
             self.position = self.gauche
-            self.check_collision()
-            #self.x -= 1
+            if not self.check_collision():
+                self.x -= 1
         elif key == K_RIGHT:
             self.position = self.droite
-            self.x += 1
+            if not self.check_collision():
+                self.x += 1
         elif key == K_UP:
             self.position = self.haut
-            self.y -= 1
+            if not self.check_collision():
+                self.y -= 1
         elif key == K_DOWN:
             self.position = self.bas
-            self.y += 1
+            if not self.check_collision():
+                self.y += 1
 
     def check_collision(self):
+        self.hauty = self.y - 1
+        self.basy = self.y + 1
+        self.droitex = self.x + 1
+        self.gauchex = self.x - 1
+
         for y in range(len(self.grille.lvtest)):
             for x in range(len(self.grille.lvtest[y])):
+                # gauche
                 if self.position == self.gauche:
                     pos_grille = self.grille.lvtest[self.y][self.gauchex]
-                    if pos_grille == [self.y, 0]:
-                        self.x = -1
+                    if pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF:
+                        g = self.grille.move_caisse(self.x, self.y, "gauche")
+                        if g:
+                            self.x = self.gauchex
+                    return pos_grille == MUR or pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF
+                # droite
+                elif self.position == self.droite:
+                    pos_grille = self.grille.lvtest[self.y][self.droitex]
+                    if pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF:
+                        g = self.grille.move_caisse(self.x, self.y, "droite")
+                        if g:
+                            self.x = self.droitex
+                    return pos_grille == MUR or pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF
+                # haut
+                elif self.position == self.haut:
+                    pos_grille = self.grille.lvtest[self.hauty][self.x]
+                    if pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF:
+                        g = self.grille.move_caisse(self.x, self.y, "haut")
+                        if g:
+                            self.y = self.hauty
+                    return pos_grille == MUR or pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF
+                # bas
+                elif self.position == self.bas:
+                    pos_grille = self.grille.lvtest[self.basy][self.x]
+                    if pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF:
+                        g = self.grille.move_caisse(self.x, self.y, "bas")
+                        if g:
+                            self.y = self.basy
+                    return pos_grille == MUR or pos_grille == CAISSE or pos_grille == CAISSE_OBJECTIF
+
 
